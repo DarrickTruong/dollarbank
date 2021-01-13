@@ -83,7 +83,14 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		System.out.println(BLUE + "\n" + header("welcome") + RESET + welcome);
 	}
 	
+	
 	public static String[] createAccount(Scanner sc) {
+		
+		boolean userNameValid = false;
+		boolean validPassword = false;
+		
+		String userName = "";
+		String password = "";
 		
 		System.out.println(BLUE + "\n" + header("create") + RESET);
 		System.out.println("Customer Name:" + GREEN);
@@ -92,19 +99,50 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		String address = sc.nextLine();
 		System.out.println(RESET+ "Customer Phone" + GREEN);
 		String phone = sc.nextLine();
-		System.out.println(RESET + "Username:" + GREEN);
-		String userName = sc.nextLine();
-		String[] customer = {name, address, phone, userName};
+		
+		
+		
+		while(!userNameValid) {
+			System.out.println(RESET + "Username:" + GREEN);
+			userName = sc.nextLine();
+			
+			String userNameMsg = InputValidation.userNameValidation(userName);
+			
+			if (userNameMsg.equals("strong")) {
+				userNameValid = true;
+			} else {
+				System.out.println(userNameMsg);
+			}
+		}
+		
+		
+		while(!validPassword) {
+			
+			password = ConsolePrinterUtility.createPassword(sc);
+			String strong = InputValidation.passwordValidation(password);
+			
+			if (strong.equals("strong")) {
+				validPassword = true;
+			} else {
+				System.out.println(strong);
+			}
+		}
+		
+		
+		
+		String[] customer = {name, address, phone, userName, password};
 		
 		return customer;
 	}
 		
+	
 	public static String createPassword(Scanner sc) {
 		System.out.println(RESET + "Password: (8 Characters with Lower, Upper, and Special Char)" + GREEN);
 		String password = sc.nextLine();
 		return password;
 	}
 		
+	
 	public static BigDecimal initialDeposit(Scanner sc) {
 
 		System.out.println(RESET + "Initial Deposit Amount" + GREEN);
@@ -112,6 +150,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		sc.nextLine();
 		return initDeposit;
 	}
+	
 	
 	public static String[] login(Scanner sc) {
 		String[] arr = new String[2];
@@ -124,6 +163,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		return arr;
 	}
 	
+	
 	public static void customerPage() {
 		String customerPage =
 				"\n 1. Deposit" +
@@ -134,6 +174,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 				"\n 6. Sign Out";
 		System.out.println(BLUE + "\n" + header("customer") + RESET + customerPage);
 	}
+	
 	
 	public static String depositAccount(Scanner sc) {
 		System.out.println(BLUE + "\n" + header("deposit") + RESET);
@@ -146,6 +187,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		
 	}
 	
+	
 	public static BigDecimal depositAmount(Scanner sc) {
 		
 		System.out.println(RESET + "How much would you like to deposit?" + GREEN);
@@ -156,16 +198,18 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		
 	}
 	
+	
 	public static String withdrawAccount(Scanner sc) {
 		
 		System.out.println(BLUE + "\n" + header("withdraw") + RESET);
-		System.out.println("Choose account to deposit $:" +
+		System.out.println("Choose account to withdraw $:" +
 				"\n1. Checking" +
 				"\n2. Savings");
 		String account = sc.nextLine();
 		return account;
 		
 	}
+	
 	
 	public static BigDecimal withdrawAmount(Scanner sc) {
 		System.out.println(RESET + "How much would you like to withdraw?" + GREEN);
@@ -174,6 +218,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		
 		return amount;
 	}
+	
 	
 	public static String transferAccount(Scanner sc) {
 		System.out.println("\n" + BLUE + header("transfer") + RESET);
@@ -184,11 +229,13 @@ public class ConsolePrinterUtility implements ColorsUtility{
 		return account;
 	}
 	
+	
 	public static String transferAmount(Scanner sc) {
 		System.out.println(YELLOW + "Transfer Amount:" + GREEN);
 		String amount = sc.nextLine();
 		return amount;
 	}
+	
 	
 	public static void lastFiveTrans() {
 		System.out.println(BLUE + "\n" +  header("transactions") + RESET);

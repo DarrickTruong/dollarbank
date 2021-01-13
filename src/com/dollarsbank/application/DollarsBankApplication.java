@@ -2,10 +2,9 @@ package com.dollarsbank.application;
 
 
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import com.dollarsbank.controller.DollarsBankController;
-import com.dollarsbank.utility.DataGeneratorStubUtil;
 
 
 public class DollarsBankApplication {
@@ -27,9 +26,21 @@ public class DollarsBankApplication {
 //		System.out.println("validated " + FileStorageUtility.validateLogin(arr));
 		
 //		ArrayList<String> arr = new ArrayList<String>();
-//		arr.add("Initial Deposit - Deposit Amount: $10000 into Checking. Checking Balance: $10000 as on WEDNESDAY - 1/13/2021 08:42:00.192711");
+//		arr.add("Initial Deposit - Deposit Amount: $10000 into Checking - Checking Balance: $10000 as on WEDNESDAY - 1/13/2021 08:42:00.192711");
 //		arr.add("Deposit Amount into Savings - Deposit Amount: $1000 - Savings Balance: $1000 as on WEDNESDAY - 1/13/2021 08:42:13.312415");
 //		
+//		String[] arrs;
+//		String strs="";
+//		for (String str:arr) {
+//			arrs = str.split(" - ");
+//			
+//			for (String words : arrs) {
+//				strs += words+"\n";
+//			}
+//			
+//			strs  += "\n----\n";
+//		}
+//		System.out.println(strs);
 //		String str = String.join(", ", arr);
 //		
 //		System.out.println(str);

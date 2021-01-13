@@ -25,7 +25,7 @@ public class DollarsBankController implements ColorsUtility{
 		Scanner sc = new Scanner(System.in);
 		LocalDateTime today = LocalDateTime.now();
 		
-		String formattedDate = today.getDayOfWeek() + " - " + today.getMonthValue() + "/" + 
+		String formattedDate = today.getDayOfWeek() + " " + today.getMonthValue() + "/" + 
 								today.getDayOfMonth() + "/" + today.getYear();
 		
 		
@@ -44,37 +44,19 @@ public class DollarsBankController implements ColorsUtility{
 //				Create customer account
 				if (selection.equals("1")) {
 					
-					boolean validPassword = false;
-					
 					custArr = ConsolePrinterUtility.createAccount(sc);
-					String password = null;
-					
-					while (!validPassword) {
-						password = ConsolePrinterUtility.createPassword(sc);
-						String strong = InputValidation.passwordValidation(password);
-						
-						if (strong.equals("strong")) {
-							validPassword = true;
-						} else {
-							System.out.println(strong);
-						}
-						
-					}
-					
-					
-					
 					BigDecimal dep = ConsolePrinterUtility.initialDeposit(sc);
 					
-					customer = new Customer(custArr[0], custArr[1], custArr[2], custArr[3], password, dep, new BigDecimal(0));
+					customer = new Customer(custArr[0], custArr[1], custArr[2], custArr[3], custArr[4], dep, new BigDecimal(0));
 					
-					
-					ArrayList<String> transactions = new ArrayList<String>();
 					
 					String balance = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 					String deposit = DataGeneratorStubUtil.formatDollars(dep);
+
 					
-					transactions.add("Initial Deposit - Deposit Amount: $" + deposit + " into Checking. Checking Balance: " + balance + " as on " + formattedDate + " " + LocalTime.now());
-//					transactions.add("Initial Deposit:" + "\nDeposit Amount: $" + deposit + " into Checking" + "\nChecking Balance: $" + customer.getAccount().getBalance() + "\nas on " + formattedDate + " " + LocalTime.now());
+					ArrayList<String> transactions = new ArrayList<String>();
+					transactions.add("Initial Deposit - Deposit Amount: " + deposit + " into Checking - Checking Balance: " + balance + 
+									" - as on " + formattedDate + " " + LocalTime.now());
 					
 					customer.setTransactions(transactions);
 					
@@ -90,7 +72,6 @@ public class DollarsBankController implements ColorsUtility{
 					while(!validated) {
 						
 						String[] login = ConsolePrinterUtility.login(sc);
-
 						
 	//					Validate login here
 						String[] valid = FileStorageUtility.validateLogin(login);
@@ -102,7 +83,9 @@ public class DollarsBankController implements ColorsUtility{
 							ArrayList<String> transactions = new ArrayList<>(Arrays.asList(trans));
 							
 							
-							customer = new Customer(valid[0], valid[1], valid[2], valid[3], valid[4], new BigDecimal(valid[5]), new BigDecimal(valid[6]), transactions);
+							customer = new Customer(valid[0], valid[1], valid[2], valid[3], 
+													valid[4], new BigDecimal(valid[5]), 
+													new BigDecimal(valid[6]), transactions);
 							validated = true; 
 							
 							
@@ -152,17 +135,15 @@ public class DollarsBankController implements ColorsUtility{
 					
 //					transfer to checking
 					if (account.equals("1")) {
-//						BigDecimal.add() adds current with deposit
+//						BigDecimal.add() adds deposit to current balance
 						BigDecimal checking = customer.getAccount().getBalance();
 						customer.getAccount().setBalance(checking.add(dep));
 						
 						String balance = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 						
-						transactions.add("Deposit Amount into Checking - Deposit Amount: $" + deposit + " - Checking Balance: " + balance + " as on " + formattedDate + " " + LocalTime.now());
-//						transactions.add("Deposit Amount into Checking:" +
-//								"\nDeposit Amount: $" + deposit +
-//								"\nChecking Balance: $" + customer.getAccount().getBalance() +
-//								"\nas on " + formattedDate + " " + LocalTime.now());
+						transactions.add("Deposit into Checking - Deposit Amount: " + deposit + " - Checking Balance: " + balance + 
+									" - as on " + formattedDate + " " + LocalTime.now());
+				
 						
 //					deposit to savings	
 					} else if (account.equals("2")) {
@@ -170,12 +151,9 @@ public class DollarsBankController implements ColorsUtility{
 						customer.getSavings().setBalance(savings.add(dep));
 						
 						String balance = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-						transactions.add("Deposit Amount into Savings - Deposit Amount: $" + deposit + " - Savings Balance: " + balance + " as on " + formattedDate + " " + LocalTime.now());
+						transactions.add("Deposit into Savings - Deposit Amount: " + deposit + " - Savings Balance: " + balance + 
+									" - as on " + formattedDate + " " + LocalTime.now());
 
-//						transactions.add("Deposit Amount into Savings:" +
-//								"\nDeposit Amount: $" + deposit +
-//								"\nSavings Balance: $" + customer.getSavings().getBalance() +
-//								"\nas on " + formattedDate + " " + LocalTime.now());
 						
 					}
 					
@@ -197,12 +175,10 @@ public class DollarsBankController implements ColorsUtility{
 							customer.getAccount().setBalance(checkingBalance.subtract(withd));
 							
 							String balance = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
-							transactions.add("Withdraw from Checking - Withdraw Amount: $" + withdraw + " - Checking Balance: " + balance + " as on " + formattedDate + " " + LocalTime.now());
+							transactions.add("Withdraw from Checking - Withdraw Amount: " + withdraw + " - Checking Balance: " + 
+												balance + " - as on " + formattedDate + " " + LocalTime.now());
 							
-//							transactions.add("Withdraw from Checking:" +
-//									"\nWithdraw Amount: $" + withdraw +
-//									"\nChecking Balance: $" + customer.getAccount().getBalance() +
-//									"\nas on " + formattedDate + " " + LocalTime.now());
+
 						}
 						
 //					withdraw from savings
@@ -217,12 +193,11 @@ public class DollarsBankController implements ColorsUtility{
 							customer.getSavings().setBalance(savingsBalance.subtract(withd));;
 							
 							String balance = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-							transactions.add("Withdraw from Savings - Withdraw Amount: $" + withdraw + " - Savings Balance: " + balance + " as on " + formattedDate + " " + LocalTime.now());
+							transactions.add("Withdraw from Savings - Withdraw Amount: " + withdraw + 
+												" - Savings Balance: " + balance + " - as on " 
+												+ formattedDate + " " + LocalTime.now());
 
-//							transactions.add("Withdraw from Savings:" +
-//									"\nWithdraw Amount: $" + withdraw +
-//									"\nSavings Balance: $" + customer.getSavings().getBalance() +
-//									"\nas on " + formattedDate + " " + LocalTime.now());
+
 					}
 						customer.setTransactions(transactions);
 						
@@ -252,12 +227,11 @@ public class DollarsBankController implements ColorsUtility{
 							
 							String checking = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 							String savings = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-							transactions.add("Transfer funds from Checking->Savings - Transfer Amount: $" + transferAmt + " - Checking Acct Balance: " + checking + " - Savings Acct Balance: $" + savings + " as on " + formattedDate + " " + LocalTime.now());
-//							transactions.add("Transfer funds from Checking->Savings" +
-//									"\nTransfer Amount: $" + transferAmt +
-//									"\nChecking Acct Balance: $" + customer.getAccount().getBalance() +
-//									"\nSavings Acct Balance: $" + customer.getSavings().getBalance() + 
-//									"\nas on " + formattedDate + " " + LocalTime.now());
+							transactions.add("Transfer funds from Checking->Savings - Transfer Amount: $" + 
+												transferAmt + " - Checking Acct Balance: " + checking + 
+												" - Savings Acct Balance: $" + savings + 
+												" - as on " + formattedDate + " " + LocalTime.now());
+
 							
 							customer.setTransactions(transactions);
 						}
@@ -275,14 +249,13 @@ public class DollarsBankController implements ColorsUtility{
 							customer.getSavings().setBalance(savingsBalance.subtract(transfer));
 							customer.getAccount().setBalance(checkingsBalance.add(transfer));
 							
-							String checking = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
+							String checking = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 							String savings = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-							transactions.add("Transfer funds from Savings->Checking - Transfer Amount: $" + transferAmt + " - Savings Acct Balance: " + savings + " - Checking Acct Balance: $" + checking + " as on " + formattedDate + " " + LocalTime.now());
-//							transactions.add("Transfer funds from Savings->Checking" +
-//									"\nTransfer Amount: $" + transferAmt +
-//									"\nChecking Acct Balance: $" + customer.getAccount().getBalance() +
-//									"\nSavings Acct Balance: $" + customer.getSavings().getBalance() +
-//									"\nas on " + formattedDate + " " + LocalTime.now());
+							transactions.add("Transfer funds from Savings->Checking - Transfer Amount: $" + 
+												transferAmt + " - Savings Acct Balance: " + savings + 
+												" - Checking Acct Balance: $" + checking + 
+												" - as on " + formattedDate + " " + LocalTime.now());
+		
 							
 							customer.setTransactions(transactions);
 						}
@@ -291,16 +264,22 @@ public class DollarsBankController implements ColorsUtility{
 //				Last 5 transactions
 				} else if (selection.equals("4")) {
 					ConsolePrinterUtility.lastFiveTrans();
+					
+					
 					int i = 0;
 					int j = transactions.size()-1;
 					while (i < 5 && j >=0) {
 						
-						System.out.println(i+1 +". " + transactions.get(j));
+						String transaction = DataGeneratorStubUtil.formatTransaction(transactions.get(j));
+						System.out.println(i+1 +". " + transaction);
 						
-						System.out.println("\n---------------------------------\n");
+						System.out.println("\n--------------------------------------------\n");
 						i++;
 						j--;
 					}
+					
+					
+					
 				
 //				Customer Information
 				} else if (selection.equals("5")) {

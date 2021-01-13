@@ -60,11 +60,62 @@ public class InputValidation {
 				}
 			}
 		}
+		
 		if (notStrong.length()==0) {
 			return "strong";
 		} else {
 			return notStrong;
 		}
 		
+	}
+	
+	
+	static String userNameValidation(String userName) {
+		// Return the minimum number of characters to make the password strong
+		int count = 0;
+		String userNameStrong = "";
+		
+		if (userName.length() < 10) {
+			count = 10 - userName.length();
+			userNameStrong += "Minimum required length is 10 characters. Please add " + count + " characters";
+		}
+		
+		HashMap<Character, Boolean> map = new HashMap<>();
+		map.put('n', false);
+		map.put('l', false);
+
+		
+
+		// check for lowercase
+		if (userName.matches(".*[a-z].*")) {
+			map.replace('l', true);
+		}
+
+
+		// check for number
+		if (userName.matches(".*[0-9].*")) {
+			map.replace('n', true);
+		}
+
+
+		
+		Set<Character> set = map.keySet();
+		for (char s : set) {
+//			System.out.println(s + " " + map.get(s));
+			if (map.get(s) == false) {
+				if (s == 'n') {
+					userNameStrong += "\nMissing a number.";
+				} else if (s == 'l') {
+					userNameStrong += "\nMissing a lower case letter.";
+				} 
+			}
+		}
+		
+
+		if (userNameStrong.length() == 0) {
+			return "strong";
+		} else {
+			return userNameStrong;
+		}
 	}
 }
