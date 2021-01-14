@@ -72,6 +72,7 @@ public class DollarsBankController implements ColorsUtility{
 						
 	//					Validate login here
 						String[] valid = FileStorageUtility.validateLogin(login);
+						
 						if (valid.length == 8) {
 							
 //							convert string to arraylist for transactions
@@ -85,13 +86,14 @@ public class DollarsBankController implements ColorsUtility{
 													new BigDecimal(valid[6]), transactions);
 							validated = true; 
 							
+							customerPage(customer, formattedDate);
 							
 						} else {
-							System.out.println("Invalid Login Credentials, Please Try again");
+							System.out.println(RED + "Invalid Login Credentials, Please Try again");
 						}
 					}
 					
-					customerPage(customer, formattedDate);
+					
 				
 				} else if (selection.equals("3")) {
 					System.out.println("\nClosing Bank App, Good Bye!");

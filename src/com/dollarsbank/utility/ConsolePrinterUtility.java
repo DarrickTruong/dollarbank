@@ -108,7 +108,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 			if (userNameMsg.equals("strong")) {
 				userNameValid = true;
 			} else {
-				System.out.println(userNameMsg);
+				System.out.println(RED + userNameMsg + RESET);
 			}
 		}
 		
@@ -121,7 +121,7 @@ public class ConsolePrinterUtility implements ColorsUtility{
 			if (strong.equals("strong")) {
 				validPassword = true;
 			} else {
-				System.out.println(strong);
+				System.out.println(RED + strong + RESET);
 			}
 		}
 		

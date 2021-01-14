@@ -75,6 +75,9 @@ public class FileStorageUtility {
 					if (login[1].equals(details[4])) {
 						return details;
 					}
+				} else {
+					String[] fail = {"fail"};
+					return fail;
 				}
 				
 			}
