@@ -1,13 +1,11 @@
 package com.dollarsbank.controller;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.Locale;
 import java.util.Scanner;
 
 import com.dollarsbank.model.Customer;
@@ -15,7 +13,6 @@ import com.dollarsbank.utility.ColorsUtility;
 import com.dollarsbank.utility.ConsolePrinterUtility;
 import com.dollarsbank.utility.DataGeneratorStubUtil;
 import com.dollarsbank.utility.FileStorageUtility;
-import com.dollarsbank.utility.InputValidation;
 
 public class DollarsBankController implements ColorsUtility{
 	
@@ -55,7 +52,7 @@ public class DollarsBankController implements ColorsUtility{
 
 					
 					ArrayList<String> transactions = new ArrayList<String>();
-					transactions.add("Initial Deposit - Deposit Amount: " + deposit + " into Checking - Checking Balance: " + balance + 
+					transactions.add("Initial Deposit - Deposit Amount: " + deposit + " into Checking - \nChecking Balance: " + balance + 
 									" - as on " + formattedDate + " " + LocalTime.now());
 					
 					customer.setTransactions(transactions);
@@ -128,12 +125,24 @@ public class DollarsBankController implements ColorsUtility{
 //				Deposit
 				if (selection.equals("1")) {
 					
-//					get account and amount to deposit
-					String account = ConsolePrinterUtility.depositAccount(sc);
+					boolean accountValid = false;
+					String account= "";
+					while(!accountValid) {
+						
+//						get account and amount to deposit
+						account = ConsolePrinterUtility.depositAccount(sc);
+						if (account.equals("1") || account.equals("2")) {
+							accountValid = true;
+						} else {
+							System.out.println(RED + "Invalid Selection. Expecting 1 or 2" + RESET);
+						}
+					}
+					
+					
 					BigDecimal dep = ConsolePrinterUtility.depositAmount(sc);
 					String deposit = DataGeneratorStubUtil.formatDollars(dep);
 					
-//					transfer to checking
+//					deposit to checking
 					if (account.equals("1")) {
 //						BigDecimal.add() adds deposit to current balance
 						BigDecimal checking = customer.getAccount().getBalance();
@@ -141,7 +150,7 @@ public class DollarsBankController implements ColorsUtility{
 						
 						String balance = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 						
-						transactions.add("Deposit into Checking - Deposit Amount: " + deposit + " - Checking Balance: " + balance + 
+						transactions.add("Deposit into Checking - Deposit Amount: " + deposit + " - \nChecking Balance: " + balance + 
 									" - as on " + formattedDate + " " + LocalTime.now());
 				
 						
@@ -151,17 +160,35 @@ public class DollarsBankController implements ColorsUtility{
 						customer.getSavings().setBalance(savings.add(dep));
 						
 						String balance = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-						transactions.add("Deposit into Savings - Deposit Amount: " + deposit + " - Savings Balance: " + balance + 
+						transactions.add("Deposit into Savings - Deposit Amount: " + deposit + " - \nSavings Balance: " + balance + 
 									" - as on " + formattedDate + " " + LocalTime.now());
 
+					} else {
 						
 					}
 					
+					
+					
 //				Withdraw
 				} else if (selection.equals("2")) {
-					String account = ConsolePrinterUtility.withdrawAccount(sc);
+					
+					boolean accountValid = false;
+					String account= "";
+					while(!accountValid) {
+						
+//						get account and amount to deposit
+						account = ConsolePrinterUtility.withdrawAccount(sc);
+						if (account.equals("1") || account.equals("2")) {
+							accountValid = true;
+						} else {
+							System.out.println(RED + "Invalid Selection. Expecting 1 or 2" + RESET);
+						}
+					}
+					
 					BigDecimal withd = ConsolePrinterUtility.withdrawAmount(sc);
 					String withdraw = DataGeneratorStubUtil.formatDollars(withd);
+					
+					
 					
 //					withdraw from checking
 					if (account.equals("1")) {
@@ -175,10 +202,9 @@ public class DollarsBankController implements ColorsUtility{
 							customer.getAccount().setBalance(checkingBalance.subtract(withd));
 							
 							String balance = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
-							transactions.add("Withdraw from Checking - Withdraw Amount: " + withdraw + " - Checking Balance: " + 
+							transactions.add("Withdraw from Checking - Withdraw Amount: " + withdraw + " - \nChecking Balance: " + 
 												balance + " - as on " + formattedDate + " " + LocalTime.now());
 							
-
 						}
 						
 //					withdraw from savings
@@ -194,21 +220,31 @@ public class DollarsBankController implements ColorsUtility{
 							
 							String balance = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
 							transactions.add("Withdraw from Savings - Withdraw Amount: " + withdraw + 
-												" - Savings Balance: " + balance + " - as on " 
+												" - \nSavings Balance: " + balance + " - as on " 
 												+ formattedDate + " " + LocalTime.now());
 
 
 					}
-						customer.setTransactions(transactions);
-						
+						customer.setTransactions(transactions);	
 						
 					}
 					
 //				transfer funds
 				} else if (selection.equals("3")) {
-					
+					boolean accountValid = false;
+					String account= "";
+					while(!accountValid) {
+						
+//						get account and amount to deposit
+						account = ConsolePrinterUtility.transferAccount(sc);
+						if (account.equals("1") || account.equals("2")) {
+							accountValid = true;
+						} else {
+							System.out.println(RED + "Invalid Selection. Expecting 1 or 2" + RESET);
+						}
+					}
 //					get account and amount to transfer from
-					String account = ConsolePrinterUtility.transferAccount(sc);
+					
 					BigDecimal transfer =  new BigDecimal(ConsolePrinterUtility.transferAmount(sc));
 					String transferAmt = DataGeneratorStubUtil.formatDollars(transfer);
 					
@@ -227,9 +263,9 @@ public class DollarsBankController implements ColorsUtility{
 							
 							String checking = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 							String savings = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-							transactions.add("Transfer funds from Checking->Savings - Transfer Amount: $" + 
-												transferAmt + " - Checking Acct Balance: " + checking + 
-												" - Savings Acct Balance: $" + savings + 
+							transactions.add("Transfer funds from Checking->Savings - Transfer Amount: " + 
+												transferAmt + " - \nChecking Acct Balance: " + GREEN + checking + RESET + 
+												" - Savings Acct Balance: " + GREEN + savings + RESET + 
 												" - as on " + formattedDate + " " + LocalTime.now());
 
 							
@@ -251,9 +287,9 @@ public class DollarsBankController implements ColorsUtility{
 							
 							String checking = DataGeneratorStubUtil.formatDollars(customer.getAccount().getBalance());
 							String savings = DataGeneratorStubUtil.formatDollars(customer.getSavings().getBalance());
-							transactions.add("Transfer funds from Savings->Checking - Transfer Amount: $" + 
-												transferAmt + " - Savings Acct Balance: " + savings + 
-												" - Checking Acct Balance: $" + checking + 
+							transactions.add("Transfer funds from Savings->Checking - Transfer Amount: " + 
+												transferAmt + " - \nSavings Acct Balance: " + savings + 
+												" - Checking Acct Balance: " + checking + 
 												" - as on " + formattedDate + " " + LocalTime.now());
 		
 							
@@ -261,29 +297,20 @@ public class DollarsBankController implements ColorsUtility{
 						}
 					}
 					
+					
 //				Last 5 transactions
 				} else if (selection.equals("4")) {
-					ConsolePrinterUtility.lastFiveTrans();
-					
-					
-					int i = 0;
-					int j = transactions.size()-1;
-					while (i < 5 && j >=0) {
+					ConsolePrinterUtility.lastFiveTrans(transactions);
+//					ConsolePrinterUtility.printTransaction(transactions);
 						
-						String transaction = DataGeneratorStubUtil.formatTransaction(transactions.get(j));
-						System.out.println(i+1 +". " + transaction);
-						
-						System.out.println("\n--------------------------------------------\n");
-						i++;
-						j--;
-					}
-					
-					
 					
 				
 //				Customer Information
 				} else if (selection.equals("5")) {
-					System.out.println(customer.toString());
+					String formattedUserInfo = DataGeneratorStubUtil.formatUserInfo(customer);
+					
+					ConsolePrinterUtility.customerInformation(formattedUserInfo);
+				
 					
 //				Log off	
 				} else if (selection.equals("6")) {

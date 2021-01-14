@@ -1,11 +1,8 @@
 package com.dollarsbank.utility;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-import com.dollarsbank.model.Customer;
 
 public class ConsolePrinterUtility implements ColorsUtility{
 	
@@ -237,8 +234,30 @@ public class ConsolePrinterUtility implements ColorsUtility{
 	}
 	
 	
-	public static void lastFiveTrans() {
+	public static void lastFiveTrans(ArrayList<String>  transactions) {
 		System.out.println(BLUE + "\n" +  header("transactions") + RESET);
+		
+		int i = 0;
+		int j = transactions.size()-1;
+		int bullet = 1;
+		while (i < 5 && j >=0) {
+			
+			String transaction = DataGeneratorStubUtil.formatTransaction(transactions.get(j));
+			
+			System.out.println(String.valueOf(bullet) +". " + transaction);
+			
+			System.out.println("\n--------------------------------------------\n");
+			i++;
+			j--;
+			bullet++;
+		}
+	}
+	
+	
+	
+	public static void customerInformation(String info) {
+		System.out.println(BLUE + "\n" + header("profile") + RESET);
+		System.out.println(info);
 	}
 	
 	

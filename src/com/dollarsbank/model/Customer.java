@@ -109,6 +109,15 @@ public class Customer implements Serializable{
 		this.transactions = transactions;
 	}
 	
+	
+	public String passwordHide() {
+		String hide = "";
+		for (int i =0; i<password.length();i++) {
+			hide += "*";
+		}
+		return hide;
+	}
+	
 	public String toFileString() {
 //		convert to string to store in file, convert string to arraylist after login
 		String transactionsString = String.join(", ", transactions);

@@ -1,6 +1,5 @@
 package com.dollarsbank.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class CheckingAccount extends Account{
@@ -8,6 +7,9 @@ public class CheckingAccount extends Account{
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	
 
 
 	public CheckingAccount(BigDecimal balance) {
